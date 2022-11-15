@@ -1,0 +1,9 @@
+[Unit]
+Description=X735 Fan Speed Control
+
+[Service]
+Type=simple
+ExecStart=/opt/x735/pwm_fan_control.py
+
+[Install]
+WantedBy=multi-user.target
