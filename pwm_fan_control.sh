@@ -16,6 +16,7 @@
 #   git clone https://github.com/libre-computer-project/libretech-wiring-tool.git
 #   cd libretech-wiring-tool
 #   make
+#   sudo ./ldto enable pwm-a
 #   sudo ./ldto merge pwm-a
 
 # PWM frequency in Hz
