@@ -33,11 +33,21 @@ last_cycle=0
 chip_path="/sys/class/pwm/pwmchip0"
 pwm_path="$chip_path/pwm0"
 
-echo "Enabling PWM0"
-# Export pwm0 for use
-echo 0 > $chip_path/export
+# Only export if not already exported
+if [[ ! -d $pwm_path ]]; then
+  echo "Exporting PWM0"
+  # Export pwm0 for use
+  echo 0 > $chip_path/export
+fi
+
+# Only enable if not already enabled
+if [[ ! $(cat $pwm_path/enable) ]]; then
+  echo "Enabling PWM0"
+  echo 1 > $pwm_path/enable
+fi
+
+# Set period based on desired frequency
 echo $period > $pwm_path/period
-echo 1 > $pwm_path/enable
 
 echo "Beginning temperature-based fan control..."
 while [[ 1 ]]; do
