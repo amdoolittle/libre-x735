@@ -45,6 +45,7 @@ fi
 if [[ $(cat $pwm_path/enable) -eq 0 ]]; then
   echo "Enabling PWM0"
   echo 1 > $pwm_path/enable
+  sleep 1
 fi
 
 # Set period based on desired frequency
