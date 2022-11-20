@@ -38,10 +38,11 @@ if [[ ! -d $pwm_path ]]; then
   echo "Exporting PWM0"
   # Export pwm0 for use
   echo 0 > $chip_path/export
+  sleep 1
 fi
 
 # Only enable if not already enabled
-if [[ ! $(cat $pwm_path/enable) ]]; then
+if [[ $(cat $pwm_path/enable) -eq 0 ]]; then
   echo "Enabling PWM0"
   echo 1 > $pwm_path/enable
 fi
