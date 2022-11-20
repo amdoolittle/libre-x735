@@ -41,15 +41,15 @@ if [[ ! -d $pwm_path ]]; then
   sleep 1
 fi
 
+# Set period based on desired frequency
+echo $period > $pwm_path/period
+sleep 1
+
 # Only enable if not already enabled
 if [[ $(cat $pwm_path/enable) -eq 0 ]]; then
   echo "Enabling PWM0"
   echo 1 > $pwm_path/enable
-  sleep 1
 fi
-
-# Set period based on desired frequency
-echo $period > $pwm_path/period
 
 echo "Beginning temperature-based fan control..."
 while [[ 1 ]]; do
