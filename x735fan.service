@@ -3,7 +3,7 @@ Description=X735 Fan Speed Control
 
 [Service]
 Type=simple
-ExecStart=scriptpath/pwm_fan_control.sh
+ExecStart=scriptpath/x735fan.sh
 
 [Install]
 WantedBy=multi-user.target

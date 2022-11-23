@@ -1,0 +1,10 @@
+[Unit]
+Description=X735 Button Monitor
+
+[Service]
+Type=simple
+ExecStart=scriptpath/x735pwr.sh
+
+[Install]
+WantedBy=multi-user.target
+
