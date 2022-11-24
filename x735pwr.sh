@@ -1,8 +1,9 @@
 #!/bin/bash
-SHUTDOWN=497
-REBOOTPULSE=200
-SHUTDOWNPULSE=600
+REBOOTPULSEMIN=200
+# 1.3 seconds plus potential 0.2 second sleep time for 1.5 max restart
+REBOOTPULSEMAX=1300 
 
+SHUTDOWN=497
 echo "$SHUTDOWN" > /sys/class/gpio/export
 echo "in" > /sys/class/gpio/gpio$SHUTDOWN/direction
 BOOT=496
@@ -17,20 +18,20 @@ while [[ 1 ]]; do
   if [[ $shutdownSignal -eq 0 ]]; then
     /bin/sleep 0.2
   else
-    pulseStart=$(date +%s)
+    pulseStart=$(date +%s%N | cut -b1-13)
     while [[ $shutdownSignal -eq 1 ]]; do
       /bin/sleep 0.2
-      if [[ $(($(date +%s%N | cut -b1-13)-$pulseStart)) -gt $SHUTDOWNPULSE ]]; then
-        echo "X735 Shutting down..."
-        sleep 1
+      if [[ $(($(date +%s%N | cut -b1-13)-$pulseStart)) -gt $REBOOTPULSEMAX ]]; then
+        echo "X735 Shutting down"
+	/bin/sleep 1
         /usr/sbin/poweroff
         exit
       fi
       shutdownSignal=$(cat /sys/class/gpio/gpio$SHUTDOWN/value)
     done
-    if [[ $(($(date +%s%N | cut -b1-13)-$pulseStart)) -gt $REBOOTPULSE ]]; then
-      echo "X735 Rebooting..."
-      sleep 1
+    if [[ $(($(date +%s%N | cut -b1-13)-$pulseStart)) -gt $REBOOTPULSEMIN ]]; then
+      echo "X735 Rebooting"
+      /bin/sleep 1
       /usr/sbin/reboot
       exit
     fi
