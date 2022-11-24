@@ -18,3 +18,12 @@ After reading through Geekworm's wiki and experimenting with the board, the X735
 # Tachometer (Fan Speed)
 
 Work in progress.
+
+# Documentation Discrepancies
+
+There's a rather large discrepancy between the documentation provided by Geekworm, the script to shutdown/reboot based on hardware, and the actual behavior of the hardware.  The X735 board responds to a button press on pin 38, triggered indirectly by the button press, by either turning off after a period of time following a slow-blink cycle, doing nothing after a fast-blink cycle, or immediately terminating with a long-press.  In the first case, we want to shutdown the system, and in the second case, restart. The documentation lists 1-2 second press for a restart, 3-7 for shutdown, and 8+ for immediate termination, while the script is written to restart at 0.6 seconds, and shutdown for anything greater. The actual behavior of the board was observed to be different from both the script and the documentation.
+
+After many cycles of triggering the pin via software with varying delays (in 0.1 second steps), the follwing is the actual behavior of the X735 board:
+- Fast blink, no action (restart): up to 1.5 second press
+- Slow blink, turn off after delay (shutdown): 1.6-4.0 second press
+- Immediate power-off: greater than 4.0 second press
