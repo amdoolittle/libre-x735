@@ -24,7 +24,9 @@ while [[ 1 ]]; do
       if [[ $(($(date +%s%N | cut -b1-13)-$pulseStart)) -gt $REBOOTPULSEMAX ]]; then
         echo "X735 Shutting down"
 	/bin/sleep 1
-        /usr/sbin/poweroff
+        # Disable watchdog and halt
+        echo 'V' | tee /dev/watchdog
+        /usr/sbin/shutdown -H now
         exit
       fi
       shutdownSignal=$(cat /sys/class/gpio/gpio$SHUTDOWN/value)
